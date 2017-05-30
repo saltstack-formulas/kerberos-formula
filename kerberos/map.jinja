@@ -1,8 +1,84 @@
-{% set kerberos = salt['grains.filter_by']({
+{% set krb5_osmap = salt['grains.filter_by']({
     'Debian': {
-        'pkg': 'krb5-user',
+        'client': 'krb5-user',
+        'utils': ['libpam-krb5', 'libpam-ccreds', 'auth-client-config', 'auth-pkg-config', 'krb5-auth-dialog', 'krb5-otp', 'sssd-krb5', 'krb5-locales',],
     },
     'FreeBSD': {
         'root_group': 'wheel',
     },
-}, merge=salt['pillar.get']('kerberos:lookup')) %}
+    'Suse': {
+       'client': 'krb5',
+       'utils': ['pam_krb5', 'krb5-apps-pkgs', 'krb5-auth-dialog', 'krb5-plugin-kdb-ldap', 'krb5-plugin-preauth-otp', 'krb5-plugin-preauth-pkinit', 'krb5-ticket-watcher',],
+    },
+    'gentoo': {
+       'client': 'app-crypt/mit-krb5-appl',
+       'utils': ['sys-auth/pam_krb5',],
+    },
+    'Arch': {
+       'client': 'krb5',
+       'utils': ['pam-krb5',],
+    },
+    'Windows': {
+       'client_config': 'C:\\winnt\\krb5.ini',
+       'default_keytab_name': 'C:\\winnt\krb5\\krb5.keytab',
+    },
+    'default': {
+       'client': 'krb5-workstation',
+       'utils': ['pam-krb5',],
+    },
+}, default='default') %}
+
+{% set kdc_osmap = salt['grains.filter_by']({
+     'default': {
+         'server': 'krb5-server',
+         'adm_server': 'krb5-libs',
+         'extras': '',
+         'service': 'krb5kdc',
+         'adm_service': 'kadmin',
+         'config': '/var/kerberos/krb5kdc/kdc.conf',
+     },
+     'Debian': {
+        'server': 'krb5-kdc',
+        'adm_server': 'krb5-admin-server',
+        'extras': ['libkadm55', 'krb5-kdc-ldap', 'krb5-strength', 'openafs-krb5',],
+        'service': 'krb5-kdc',
+        'adm_service': 'krb5-admin-server',
+        'config': '/etc/krb5kdc/kdc.conf',
+        'acl_file': '/etc/krb5kdc/kadm5.acl',
+        'database_name': '/usr/local/var/krb5kdc/principal',
+        'kdb_util_create': 'krb5_newrealm',
+     },
+     'Suse': {
+        'server': 'krb5-server',
+        'adm_server': 'krb5',
+        'extras': ['krb5-appl-servers',],
+        'service': 'krb5kdc',
+        'adm_service': 'kadmin',
+        'config': '/var/lib/kerberos/krb5kdc/kdc.conf',
+        'libdefaults_default_ccache_name': 'FILE:/tmp/krb5cc_%{uid}',
+     },
+     'gentoo': {
+        'server': 'app-crypt/heimdal',
+        'adm_server': '',
+        'extras': ['net-misc/openssh',],
+        'adm_service': '',
+        'config': '/var/lib/krb5kdc/kdc.conf',
+     },
+     'Arch': {
+        'server': 'krb5',
+        'adm_server': 'krb5',
+        'service': 'krb5-kdc',
+        'adm_service': 'krb5-kadmind',
+        'kprop_service': 'krb5-kpropd',
+        'config': '/var/lib/krb5kdc/kdc.conf',
+        'kprop_config': '/var/lib/krb5kdc/kpropd.acl',
+        'acl_file': '/usr/local/var/krb5kdc/kadm5.acl',
+        'database_name': '/usr/local/var/krb5kdc/principal',
+     },
+}, default='default') %}
+
+{## start with defaults, merging osmapping and pillars ##}
+{% import_yaml 'kerberos/defaults.yaml' as defs %}
+{% do defs.kerberos.kdc.update( kdc_osmap ) %}
+{% do defs.kerberos.krb5.update( krb5_osmap ) %}
+{% set kerberos = salt['pillar.get']( 'kerberos', default=defs.kerberos, merge=True) %}
