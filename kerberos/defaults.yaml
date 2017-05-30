@@ -1,0 +1,71 @@
+# Default lookup dictionary for Kerberos V5
+kerberos:
+  krb5:
+    client_config: /etc/krb5.conf
+    client_config_src: salt://kerberos/files/krb5.conf
+    libdefaults:
+      default_realm: EXAMPLE.COM
+      default_domain: example.com
+      dns_lookup_kdc: false
+      dns_lookup_realm: yes
+      ticket_lifetime: 25h
+      renew_lifetime: 120h
+      forwardable: false
+      proxiable: false
+      rdns: false
+      clockskew: 300
+      allow_weak_crypto: false
+    realms:
+      EXAMPLE.COM:
+        kdc:
+          - primary-dc.example.com
+          - slave-dc.example.com
+        admin_server: primary-dc.example.com
+        master_kdc: primary-dc.example.com
+        slave_kdc: slave-dc.example.com
+    domain_realm:
+      .example.com: EXAMPLE.COM
+      example.com: EXAMPLE.COM
+    capaths:
+    appdefaults:
+
+  kdc:
+    default_master: primary-dc.example.com
+    default_slave: primary-dc.example.com
+    config: /var/kerberos/krb5kdc/kdc.conf
+    config_src: salt://kerberos/files/kdc.conf
+    acl_file: /var/kerberos/krb5kdc/kadm5.acl
+    acl_file_src: salt://kerberos/files/kadm5.acl
+    kprop_acl_file: /var/kerberos/krb5kdc/kpropd.acl
+    kprop_acl_file_src: salt://kerberos/files/kpropd.acl
+    kdb_util_create: /usr/sbin/kdb5_util create -s
+    compat_service: krb524d
+    kprop_service: kprop
+
+    kdcdefaults:
+      kdc_ports: 88
+      kdc_listen: 88
+      kdc_tcp_ports: 88
+      kdc_tcp_listen: 88
+      default_keytab: /etc/krb5/krb5.keytab
+      dict_file: /usr/share/dict/words
+    realms:
+      #supported_enctypes: 'aes256-cts:normal aes128-cts:normal des3-hmac-sha1:normal arcfour-hmac:normal camellia256-cts:normal camellia128-cts:normal des-hmac-sha1:normal des-cbc-md5:normal des-cbc-crc:normal'
+      #database_name: /usr/local/var/krb5kdc/principal
+      #key_stash_file: /usr/local/var/krb5kdc/.EXAMPLE.COM
+      #acl_file: /var/kerberos/krb5kdc/kadm5.acl
+      kdc_listen: 88
+      kdc_tcp_listen: 88
+      max_life: 10h 0m 0s
+      max_renewable_life: 7d 0h 0m 0s
+    dbdefaults:
+    dbmodules:
+    otp:
+    logging:
+      kdc: 'FILE:/var/log/krb5kdc.log'
+      admin_server: 'FILE:/var/log/kadmin.log'
+      default: 'FILE:/var/log/krb5lib.log'
+
+    keytabs:
+      - dummy.keytab
+
