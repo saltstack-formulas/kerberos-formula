@@ -1,4 +1,12 @@
 {% from "kerberos/map.jinja" import kerberos with context %}
+ 
+#Legacy pillar structure
+{%- set keytabs = salt['pillar.get']('kerberos:keytabs') -%}
+
+#New pillar structure or no pillars
+{% if kerberos.kdc.keytabs %}
+  {%- set keytabs = kerberos.kdc.keytabs -%}
+{% endif %}
 
 /etc/krb5:
   file.directory:
@@ -12,11 +20,12 @@
       - mode
     - makedirs: True
 
-{%- for keytab in salt['pillar.get']('kerberos:keytabs') %}
+{%- for keytab in keytabs %}
 /etc/krb5/{{ keytab }}:
   file.managed:
     - user: root
     - source: salt://kerberos/files/{{ keytab }}
-    - group: {{ kerberos.get('root_group', 'root') }}
+    - group: {{ kerberos.krb5.get('root_group', 'root') }}
     - template: jinja
 {%- endfor %}
+
