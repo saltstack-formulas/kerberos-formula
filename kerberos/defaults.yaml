@@ -8,14 +8,13 @@ kerberos:
       default_domain: example.com
       dns_lookup_kdc: false
       dns_lookup_realm: yes
-      ticket_lifetime: 25h 
+      ticket_lifetime: 25h
       renew_lifetime: 120h
       forwardable: true
       rdns: false
-      default_ccache_name: 'KEYRING:persistent:%{uid}'
+      #default_ccache_name: 'KEYRING:persistent:%{uid}'
       clockskew: 1m
       proxiable: true
-      dns_lookup_kdc: true
       allow_weak_crypto: false
     realms:
       EXAMPLE.COM:
