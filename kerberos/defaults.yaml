@@ -12,10 +12,9 @@ kerberos:
       renew_lifetime: 120h
       forwardable: true
       rdns: false
-      default_ccache_name: 'KEYRING:persistent:%{uid}'
+      #default_ccache_name: 'KEYRING:persistent:%{uid}'
       clockskew: 1m
       proxiable: true
-      dns_lookup_kdc: true
       allow_weak_crypto: false
     realms:
       EXAMPLE.COM:
@@ -25,7 +24,7 @@ kerberos:
         admin_server: primary-dc.example.com
         master_kdc: primary-dc.example.com
         slave_kdc: slave-dc.example.com
-        default_principal_flags = +preauth
+        #default_principal_flags = 'preauth'
     domain_realm:
       .example.com: EXAMPLE.COM
       example.com: EXAMPLE.COM

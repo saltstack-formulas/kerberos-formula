@@ -1,32 +1,43 @@
 kerberos:
-  libdefaults:
-    default_realm: ATHENA.MIT.EDU
-    dns_lookup_kdc: yes
-    dns_lookup_realm: yes
+  krb5:
+    libdefaults:
+      default_realm: ATHENA.MIT.EDU
+      default_domain: athena.mit.edu
+      dns_lookup_kdc: yes
+      dns_lookup_realm: yes
   
-  realms:
-    ATHENA.MIT.EDU:
-      kdc:
-        - kerberos.mit.edu
-        - kerberos-1.mit.edu
-        - "kerberos.mit.edu:750"
-      admin_server: kerberos.mit.edu
-      master_kdc: kerberos.mit.edu
+    realms:
+      ATHENA.MIT.EDU:
+        kdc:
+          - kerberos.mit.edu
+          - kerberos-1.mit.edu
+          - "kerberos.mit.edu:750"
+        admin_server: kerberos.mit.edu
+        master_kdc: kerberos.mit.edu
 
-    EXAMPLE.COM:
-      kdc:
-        - kerberos.example.com
-        - kerberos-1.example.com
-      admin_server: kerberos.example.com
+      EXAMPLE.COM:
+        kdc:
+          - kerberos.example.com
+          - kerberos-1.example.com
+        admin_server: kerberos.example.com
  
-  domain_realm:
-    mit.edu: ATHENA.MIT.EDU
+    domain_realm:
+      .mit.edu: ATHENA.MIT.EDU
+      mit.edu: ATHENA.MIT.EDU
+      .example.com: EXAMPLE.COM
+      example.com: EXAMPLE.COM
  
-  capaths:
-    ATHENA.MIT.EDU:
-      EXAMPLE.COM: .
-    EXAMPLE.COM:
-      ATHENA.MIT.EDU: .
+    capaths:
+      ATHENA.MIT.EDU:
+        EXAMPLE.COM: .
+      EXAMPLE.COM:
+        ATHENA.MIT.EDU: .
 
-  keytabs:
-    - http.keytab
+  kdc:
+    default_master: kerberos.mit.edu
+    default_slave: kerberos-slave.mit.edu
+    logging:
+      kdc: 'FILE:/var/log/krb5kdc.log'
+
+    keytabs:
+      - dummy.keytab
