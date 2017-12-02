@@ -32,3 +32,8 @@ Configures the krb5.conf file.
 ------------
 
 Deploys keytab files.
+
+``kerberos.kdc``
+------------
+
+Basic support for Kerberos V5 domain controllers (KDC).
