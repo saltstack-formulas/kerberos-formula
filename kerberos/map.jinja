@@ -7,7 +7,7 @@
         'root_group': 'wheel',
     },
     'Suse': {
-       'client': 'krb5-pkg',
+       'client': 'krb5',
        'utils': ['pam_krb5', 'krb5-apps-pkgs', 'krb5-auth-dialog', 'krb5-plugin-kdb-ldap', 'krb5-plugin-preauth-otp', 'krb5-plugin-preauth-pkinit', 'krb5-ticket-watcher',],
     },
     'gentoo': {
@@ -36,7 +36,6 @@
          'service': 'krb5kdc',
          'adm_service': 'kadmin',
          'config': '/var/kerberos/krb5kdc/kdc.conf',
-         'dict_file': '/usr/share/dict/words',
      },
      'Debian': {
         'server': 'krb5-kdc',
@@ -50,8 +49,11 @@
         'kdb_util_create': 'krb5_newrealm',
      },
      'Suse': {
+        'server': 'krb5-server',
         'adm_server': 'krb5',
         'extras': ['krb5-appl-servers',],
+        'service': 'krb5kdc',
+        'adm_service': 'kadmin',
         'config': '/var/lib/kerberos/krb5kdc/kdc.conf',
         'libdefaults_default_ccache_name': 'FILE:/tmp/krb5cc_%{uid}',
      },

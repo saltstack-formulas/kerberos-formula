@@ -10,11 +10,10 @@ kerberos:
       dns_lookup_realm: yes
       ticket_lifetime: 25h
       renew_lifetime: 120h
-      forwardable: true
+      forwardable: false
+      proxiable: false
       rdns: false
-      #default_ccache_name: 'KEYRING:persistent:%{uid}'
-      clockskew: 1m
-      proxiable: true
+      clockskew: 300
       allow_weak_crypto: false
     realms:
       EXAMPLE.COM:
@@ -24,7 +23,6 @@ kerberos:
         admin_server: primary-dc.example.com
         master_kdc: primary-dc.example.com
         slave_kdc: slave-dc.example.com
-        #default_principal_flags = 'preauth'
     domain_realm:
       .example.com: EXAMPLE.COM
       example.com: EXAMPLE.COM
@@ -39,8 +37,6 @@ kerberos:
     kprop_acl_file: /var/kerberos/krb5kdc/kpropd.acl
     kprop_acl_file_src: salt://kerberos/files/kpropd.acl
     kadm5_acl_file_src: salt://kerberos/files/kadm5.acl
-    default_keytab: /etc/krb5/krb5.keytab
-    dict_file: /usr/share/dict/words
     kdb_util_create: /usr/sbin/kdb5_util create -s
     compat_service: krb524d
     kprop_service: kprop
@@ -50,6 +46,8 @@ kerberos:
       kdc_listen: 88
       kdc_tcp_ports: 88
       kdc_tcp_listen: 88
+      default_keytab: /etc/krb5/krb5.keytab
+      dict_file: /usr/share/dict/words
     realms:
       #supported_enctypes: 'aes256-cts:normal aes128-cts:normal des3-hmac-sha1:normal arcfour-hmac:normal camellia256-cts:normal camellia128-cts:normal des-hmac-sha1:normal des-cbc-md5:normal des-cbc-crc:normal'
       #database_name: /usr/local/var/krb5kdc/principal

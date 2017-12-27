@@ -36,4 +36,4 @@ Deploys keytab files.
 ``kerberos.kdc``
 ------------
 
-Basic support for Kerberos V5 domain controllers (KDC).
+Basic support for Kerberos V5 domain controllers (KDC) on Suse, RedHat, Ubuntu.
