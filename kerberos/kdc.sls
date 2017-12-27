@@ -38,8 +38,8 @@ kerberos_kdc_realms_kprop_acl:
 
 kerberos_kdc_realms_kadm5_acl:
   file.managed:
-    - name: {{ kerberos.kdc.realms.acl_file }}
-    - source: {{ kerberos.kdc.kadm5_acl_file_src }}
+    - name: {{ kerberos.kdc.acl_file }}
+    - source: {{ kerberos.kdc.acl_file_src }}
     - template: jinja
     - user: root
     - group: {{ kerberos.get('krb5:root_group', 'root') }}
